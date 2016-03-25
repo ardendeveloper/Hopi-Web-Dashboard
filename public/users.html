@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Hopi App - Dashboard</title>
+  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+  <link href="dist/css/sb-admin-2.css" rel="stylesheet">
+  <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="dist/css/custom.css">
+  <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">Hopi App</a>
+      </div>
+      <!-- /.navbar-header -->
+
+      <ul class="nav navbar-top-links navbar-right">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-user">
+            <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+            </li>
+          
+            <li class="divider"></li>
+            <li><a href="index.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+          </ul>
+        <!-- /.dropdown-user -->
+        </li>
+      <!-- /.dropdown -->
+      </ul>
+      <!-- /.navbar-top-links -->
+
+      
+      <!-- /.navbar-static-side -->
+    </nav>
+
+    <div class="container-fluid">
+      <!-- Dashboard Title -->
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">Dashboard</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+      </div>
+
+      <div class="row">
+        <div class="col-lg-3 col-md-6">
+          <div class="panel panel-green">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-3">
+                  <i class="fa fa-users fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                  <div class="huge"><span id="txtNumUsers">00</span></div>
+                  <div>All Users</div>
+                </div>
+              </div>
+            </div>
+            <a href="#userTable">
+              <div class="panel-footer">
+                <span class="pull-left">View Details</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-3">
+                  <i class="fa fa-check-circle fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                  <div class="huge"><span id="txtNumOnline">00</span></div>
+                  <div>Online Users</div>
+                </div>
+              </div>
+            </div>
+            <a href="#onlineTable">
+              <div class="panel-footer">
+                <span class="pull-left">View Details</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="panel panel-red">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-3">
+                  <i class="fa fa-power-off fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                  <div class="huge"><span id="txtNumOffline">00</span></div>
+                  <div>Offline Users</div>
+                </div>
+              </div>
+            </div>
+            <a href="#offlineTable">
+              <div class="panel-footer">
+                <span class="pull-left">View Details</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="panel panel-yellow">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-3">
+                  <i class="fa fa-comments fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                  <div class="huge"><span id="txtNumChat">00</span></div>
+                  <div>All Messages</div>
+                </div>
+              </div>
+            </div>
+            <a href="#chatTable">
+              <div class="panel-footer">
+                <span class="pull-left">View Details</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-green">
+            <div class="panel-heading">
+              Users
+            </div>
+            <div class="panel-body">
+              <table class="table table-bordered table-hovered" id="userTable">
+                <a href="register.html"><button class="btn btn-primary"><i class="fa fa-plus"></i> Add New</button><br><br></a>
+                <thead>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Student Number</th>
+                  <th>Course & Year</th>
+                  <th>Manage</th>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              Online Users
+            </div>
+            <div class="panel-body">
+              <table class="table table-bordered table-hovered" id="onlineTable">
+                <p>Total Online Users: <b><span id="txtCountOnline">00</span></b></p>
+                <thead>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Student Number</th>
+                  <th>Course & Year</th>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="panel panel-red">
+            <div class="panel-heading">
+              Offline Users
+            </div>
+            <div class="panel-body">
+              <table class="table table-bordered table-hovered" id="offlineTable">
+                <p>Total Offline Users: <b><span id="txtCountOffline">00</span></b></p>
+                <thead>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Student Number</th>
+                  <th>Course & Year</th>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="panel panel-yellow">
+            <div class="panel-heading">
+              Chat Room
+            </div>
+            <div class="panel-body">
+              <table class="table table-bordered table-hovered" id="chatTable">
+                <thead>
+                  <th>Sender</th>
+                  <th>Message</th>
+                  <th>Timestamp</th>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="panel panel-green">
+            <div class="panel-heading">
+              Audit Trail
+            </div>
+            <div class="panel-body">
+              <table class="table table-bordered table-hovered" id="auditTable">
+                <thead>
+                  <th>Action</th>
+                  <th>User</th>
+                  <th>Timestamp</th>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- page-wrapper -->
+  </div> <!-- wrapper -->
+
+    <!-- jQuery -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="dist/js/sb-admin-2.js"></script>
+    <script src="bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+    <script src="js/custom.js"></script>
+    
+    <script>
+      var myFirebaseRef = new Firebase("https://hopi.firebaseio.com");
+      var userTable = $('#userTable').DataTable();
+      var onlineTable = $('#onlineTable').DataTable();
+      var offlineTable = $('#offlineTable').DataTable();
+      var chatTable = $('#chatTable').DataTable();
+      var auditTable = $('#auditTable').DataTable();
+
+      function showAlert(){
+             alert("huhu");
+             console.log("huhu");
+          }
+
+      myFirebaseRef.child("users").on("value", function(snapshot) {
+        $("#txtNumUsers").text(snapshot.numChildren());
+        $("#txtCountUsers").text(snapshot.numChildren());
+        snapshot.forEach(function(childSnapshot) {
+          var row = childSnapshot.val();
+
+          userTable.row.add( [
+              row.firstName+ " "+ row.lastName,
+              row.email,
+              row.studentNumber,
+              row.course,
+              "<a href='edit.html?id="+row.pushID+"'><button type='button' class='btn btn-warning'><i class='fa fa-pencil'></i></button></a><button type='button' class='btn btn-danger' onclick='showAlert()'><i class='fa fa-trash-o'></i></button>"
+          ] ).draw(false);
+
+          
+        });        
+      });
+
+      myFirebaseRef.child("users").orderByChild("status").equalTo("online").on("value", function(snapshot) {
+        $("#txtNumOnline").text(snapshot.numChildren());
+        $("#txtCountOnline").text(snapshot.numChildren());
+        snapshot.forEach(function(childSnapshot) {
+          var row = childSnapshot.val();
+          onlineTable.row.add( [
+              row.firstName+ " "+ row.lastName,
+              row.email,
+              row.studentNumber,
+              row.course
+          ] ).draw(false);
+          // $('#onlineTable')
+          //   .append("<tr><td>"+row.firstName+ " "+ row.lastName +"</td><td>"+row.email +"</td><td>"+row.studentNumber +"</td><td>"+row.course +" - Year"+"</td></tr>")
+        });
+      });
+
+      myFirebaseRef.child("users").orderByChild("status").equalTo("offline").on("value", function(snapshot) {
+        $("#txtNumOffline").text(snapshot.numChildren());
+        $("#txtCountOffline").text(snapshot.numChildren());
+        snapshot.forEach(function(childSnapshot) {
+          var row = childSnapshot.val();
+          offlineTable.row.add( [
+              row.firstName+ " "+ row.lastName,
+              row.email,
+              row.studentNumber,
+              row.course
+          ] ).draw(false);
+          // $('#offlineTable')
+          //   .append("<tr><td>"+row.firstName+ " "+ row.lastName +"</td><td>"+row.email +"</td><td>"+row.studentNumber +"</td><td>"+row.course +" - Year"+"</td></tr>")
+        });
+      });
+
+      myFirebaseRef.child("chat-room").on("value", function(snapshot) {
+        $("#txtNumChat").text(snapshot.numChildren());
+        snapshot.forEach(function(childSnapshot) {
+          var row = childSnapshot.val();
+          chatTable.row.add( [
+              row.name,
+              row.text,
+              row.timeStamp,
+          ] ).draw(false);
+        });
+      });
+
+      myFirebaseRef.child("audit-trail").on("value", function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+          var row = childSnapshot.val();
+          auditTable.row.add( [
+              row.action,
+              row.user,
+              row.timestamp
+          ] ).draw(false);
+          // $('#offlineTable')
+          //   .append("<tr><td>"+row.firstName+ " "+ row.lastName +"</td><td>"+row.email +"</td><td>"+row.studentNumber +"</td><td>"+row.course +" - Year"+"</td></tr>")
+        });
+      });
+
+     
+    </script>
+</body>
+
+</html>
+    

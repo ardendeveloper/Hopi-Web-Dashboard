@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Hopi App - Edit Profile</title>
+  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="dist/css/sb-admin-2.css" rel="stylesheet">
+  <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+  <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+  <link href="plugins/toastr.min.css" rel="stylesheet">
+  
+</head>
+
+<body>
+
+  <div class="container">
+    <br>
+    <a href="users.html"><button class="btn btn-primary">Back to Dashboard</button></a><br><br>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Registration Form</h3>
+          </div>
+          <div class="panel-body">
+            <form>
+              <fieldset>
+                <div class="form-group">
+                  <label for="">Email:</label>
+                  <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus id="txtEmail" value="" required>
+                </div>
+                <div class="form-group">
+                  <label for="">Password:</label>
+                  <input class="form-control" placeholder="Password" id="txtPassword" type="password" value="" required>
+                </div>
+                <div class="form-group">
+                  <label for="">First Name:</label>
+                  <input class="form-control" placeholder="First Name" id="txtFirstName" type="text" value="" required>
+                </div>
+                <div class="form-group">
+                  <label for="">Last Name:</label>
+                  <input class="form-control" placeholder="Last Name" id="txtLastName" type="text" value="" required>
+                </div>
+                <div class="form-group">
+                  <label for="">Course:</label>
+                  <input class="form-control" placeholder="Course" id="txtCourse" type="text" value="" required>
+                </div>
+                <div class="form-group">
+                  <label for="">Year Level: e.g.(1st Year)</label>
+                  <input class="form-control" placeholder="Year Level" id="txtYear" type="text" value="" required>
+                </div>
+                <div class="form-group">
+                  <label for="">Student Number:</label>
+                  <input class="form-control" placeholder="Student Number" id="txtStudentNumber" type="text" value="" required>
+                </div>
+
+                <!-- Change this to a button or input when using this as a form -->
+                <input type="submit" class="btn btn-lg btn-success btn-block" name="btnSignUp" value="Update">
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="dist/js/sb-admin-2.js"></script>
+  <script src="bower_components/metisMenu/dist/metisMenu.min.js"></script>
+  <script src="plugins/toastr.min.js"></script>
+  <script src="js/custom.js"></script>
+  <!-- Firebase -->
+  <script>
+    var myFirebaseRef = new Firebase("https://hopi.firebaseio.com");
+    
+    var GET = {};
+    var queryString = window.location.search.replace(/^\?/, '');
+    queryString.split(/\&/).forEach(function(keyValuePair) {
+             var paramName = keyValuePair.replace(/=.*$/, ""); // some decoding is probably necessary
+             var paramValue = keyValuePair.replace(/^[^=]*\=/, ""); // some decoding is probably necessary
+             GET[paramName] = paramValue;
+           });
+    var id = GET['id'];
+
+    myFirebaseRef.child('users/'+id).on("value", function(snapshot) {
+      var row = snapshot.val();
+      $("#txtEmail").val(row.email);
+      $("#txtFirstName").val(row.firstName);
+      $("#txtLastName").val(row.lastName);
+      $("#txtPassword").val(row.password);
+      $("#txtCourse").val(row.course);
+      $("#txtYear").val(row.year);
+      $("#txtStudentNumber").val(row.studentNumber);
+    }, function (errorObject) {
+      console.log("The read failed: " + errorObject.code);
+    });
+
+    function register(){
+      var email = $("#txtEmail").val();
+      var firstName = $("#txtFirstName").val();
+      var lastName = $("#txtLastName").val();
+      var password = $("#txtPassword").val();
+      var course = $("#txtCourse").val();
+      var year = $("#txtYear").val();
+      var studentNumber = $("#txtStudentNumber").val();
+
+
+      showToast("success", "Profile Update Successful!");
+      myFirebaseRef.child("users/"+id).update({
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        password: password,
+        course: course,
+        year: year,
+        studentNumber: studentNumber
+      });
+      window.setTimeout(function(){
+        window.location.href = "users.html";
+      }, 2000);
+    }
+
+
+
+    $( "form" ).submit(function( event ) {
+      register();
+      event.preventDefault();
+
+    });
+
+    function showToast(result, text){
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "6000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+      toastr[result](text);
+    }
+  </script>
+</body>
+
+</html>
